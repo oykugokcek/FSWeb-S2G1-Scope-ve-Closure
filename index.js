@@ -18,7 +18,7 @@
 function ilkiniDon(stringArray, callback) {
   return callback(stringArray[0])
 }
-console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin+metin}));
+console.log('örnek görev:', ilkiniDon(['as', 'sa'], function (metin) { return metin + metin }));
 
 // Başlangıç Challenge'ı Sonu
 
@@ -40,7 +40,7 @@ console.log('örnek görev:', ilkiniDon(['as','sa'],function(metin){return metin
 function skorArtirici() {
   let skor = 0;
   return function skorGuncelle() {
-   return skor++;
+    return skor++;
   }
 }
 
@@ -64,10 +64,10 @@ Aşağıdaki takimSkoru() fonksiyonununda aşağıdakileri yapınız:
 Not: Bu fonskiyon, aşağıdaki diğer görevler için de bir callback fonksiyonu olarak da kullanılacak
 */
 
-function takimSkoru(/*Kodunuzu buraya yazınız*/){
-    /*Kodunuzu buraya yazınız*/
+function takimSkoru() {
+  return Math.floor(Math.random() * 16) + 10;
 }
-
+console.log(takimSkoru());
 
 
 
@@ -84,12 +84,23 @@ Aşağıdaki macSonucu() fonksiyonununda aşağıdakileri yapınız:
   "EvSahibi": 92,
   "KonukTakim": 80
 }
-*/ 
+*/
 
-function macSonucu(/*Kodunuzu buraya yazınız*/){
-  /*Kodunuzu buraya yazınız*/
+function macSonucu(callbackFunction, ceyrekSayisi) {
+  let macSkoru = {
+    EvSahibi: 0,
+    KonukTakim: 0,
+  }
+  for (let i = 0; i < ceyrekSayisi; i++) {
+    macSkoru.EvSahibi += callbackFunction();
+    macSkoru.KonukTakim += callbackFunction();
+
+  }
+  return macSkoru;
+
 }
 
+console.log(macSonucu(takimSkoru, 4));
 
 
 
@@ -109,10 +120,24 @@ Aşağıdaki periyotSkoru() fonksiyonununda aşağıdakileri yapınız:
   */
 
 
-function periyotSkoru(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
+function periyotSkoru(callbackFunction) {
+
+  let macSkoru =
+  {
+    EvSahibi: 0,
+    KonukTakim: 0,
+  }
+
+  macSkoru.EvSahibi += callbackFunction();
+  macSkoru.KonukTakim += callbackFunction();
+
+  return macSkoru;
 
 }
+
+console.log(periyotSkoru(takimSkoru));
+
+
 
 
 /* Zorlayıcı Görev 5: skorTabelasi() 
@@ -146,15 +171,80 @@ MAÇ UZAR ise skorTabelasi(periyotSkoru,takimSkoru,4)
 ] */
 // NOTE: Bununla ilgili bir test yoktur. Eğer logladığınız sonuçlar yukarıdakine benziyor ise tmamlandı sayabilirsiniz.
 
-function skorTabelasi(/*Kodunuzu buraya yazınız*/) {
-  /*Kodunuzu buraya yazınız*/
+
+function skorTabelasi(periyotSkoru, takimSkoru, ceyrekSayisi) {
+  let sonucArray = [];
+  let toplamEvSahibi = 0;
+  let toplamKonukTakım = 0;
+  for (i = 1; i <= ceyrekSayisi; i++) {
+    let sonuc = periyotSkoru(takimSkoru);
+    sonucArray[(i-1)] = i + ". Periyot: Ev Sahibi " + sonuc.EvSahibi + " - Konuk Takım " + sonuc.KonukTakim;
+    toplamEvSahibi += sonuc.EvSahibi;
+    toplamKonukTakım += sonuc.KonukTakim;
+  }
+  while  (toplamEvSahibi === toplamKonukTakım)
+  {
+    let i = 1;
+    uzatma = periyotSkoru(takimSkoru);
+    toplamEvSahibi += uzatma.EvSahibi;
+    toplamKonukTakım += uzatma.KonukTakim;
+    let str =  i + ". Uzatma: Ev Sahibi " + uzatma.EvSahibi + " - Konuk Takım " + uzatma.KonukTakim +"\n";
+    sonucArray.push(str);
+  }
+    const macSonucu = "Mac Sonucu: Ev Sahibi " + toplamEvSahibi + " - Konuk Takım " + toplamKonukTakım;
+    sonucArray.push(macSonucu);
+    return sonucArray;
 }
+
+
+console.log(skorTabelasi(periyotSkoru, takimSkoru, 4));
+
+
+
+
+
+
+
+/*function skorTabelasi(periyotSkoru, takimSkoru, ceyrekSayisi) {
+  let ceyrekSonucu = [];
+  let str ="";
+  let totalEvSahibi = 0;
+  let totalKonukTakım = 0;
+  for (let i=1; i<=ceyrekSayisi; i++)
+  {
+    
+    let uzatma;
+    ceyrekSonucu[i] = periyotSkoru(takimSkoru);
+    totalEvSahibi += ceyrekSonucu[i].EvSahibi;
+    totalKonukTakım += ceyrekSonucu[i].KonukTakim;
+    str += i + ". Periyot: Ev Sahibi " + ceyrekSonucu[i].EvSahibi + " - Konuk Takım " + ceyrekSonucu[i].KonukTakim +"\n";
+    
+    }
+    while (totalEvSahibi === totalKonukTakım)
+    {
+      let i = 1;
+      uzatma = periyotSkoru(takimSkoru);
+      totalEvSahibi += uzatma.EvSahibi;
+      totalKonukTakım += uzatma.KonukTakim;
+      str += + i + ". Uzatma: Ev Sahibi " + uzatma.EvSahibi + " - Konuk Takım " + uzatma.KonukTakim +"\n";
+    
+}
+    const macSonucu = "Mac Sonucu: Ev Sahibi " + totalEvSahibi + " - Konuk Takım " + totalKonukTakım;
+    str += macSonucu; 
+    return str;
+    
+
+}
+
+console.log(skorTabelasi(periyotSkoru, takimSkoru, 4));
+
+*/
 
 
 
 
 /* Aşağıdaki satırları lütfen değiştirmeyiniz*/
-function sa(){
+function sa() {
   console.log('Kodlar çalışıyor');
   return 'as';
 }
